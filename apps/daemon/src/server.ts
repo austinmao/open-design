@@ -3191,6 +3191,17 @@ export async function startServer({
       && critiqueSkill !== undefined
       && !isMediaSurface
       && isPlainAdapter;
+    // Spec 101 T028 — thread per-request tenant ctx into the prompt composer
+    // so the wedge form-action injection uses the registry-resolved
+    // wedge_endpoint + tenant_id instead of falling back to LUMINA_WEDGE_*
+    // env vars. Legacy mode (tenantCtx undefined) still falls back via the
+    // composer's own env-var path.
+    const promptCtx = isRealTenantCtx(tenantCtx)
+      ? {
+          tenant_id: tenantCtx.tenant_id,
+          wedge_endpoint: tenantCtx.wedge_endpoint,
+        }
+      : undefined;
     // Only thread the critique fields when the run is actually eligible;
     // otherwise the composer's own internal eligibility check (cfg.enabled
     // && brand && skill && !isMediaSurface) might still fire on

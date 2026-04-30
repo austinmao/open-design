@@ -36,6 +36,28 @@ import { MEDIA_GENERATION_CONTRACT } from './media-contract.js';
 import { IMAGE_MODELS } from '../media-models.js';
 import { renderPanelPrompt } from './panel.js';
 import { defaultCritiqueConfig, type CritiqueConfig } from '@open-design/contracts/critique';
+import type { RequestTenantContext } from '../auth/tenant-context.js';
+
+/**
+ * Phase 4 placeholder. Shape will be filled in when the design-system token
+ * pipeline lands. Kept optional so the system-prompt composer can accept it
+ * today without breaking callers that don't yet have the data.
+ */
+export interface DesignSystemTokens {
+  voice_tokens?: string[];
+  voice_avoid?: string[];
+}
+
+/**
+ * The slice of `RequestTenantContext` the system-prompt composer needs.
+ * Multi-tenant callers pass their per-request snapshot here; legacy
+ * single-tenant boot code can leave `ctx` undefined and fall back to env vars.
+ */
+export type TenantPromptContext = Partial<
+  Pick<RequestTenantContext, 'wedge_endpoint' | 'tenant_id'>
+> & {
+  design_system?: DesignSystemTokens;
+};
 
 type ProjectMetadata = {
   kind?: string;
