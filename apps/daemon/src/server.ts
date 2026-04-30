@@ -2275,14 +2275,95 @@ export async function startServer({
     console.warn('[od] Failed to recover stale live artifact refreshes:', error);
   });
 
+  // Spec 101 — multi-tenant security boundary.
+  //
+  // When TENANT_REGISTRY_PATH is set, load the registry at boot and wire the
+  // tenant-resolution middleware ahead of every route handler. When unset,
+  // skip wiring entirely so legacy single-tenant mode (spec 100 BYOK + Lumina
+  // gateway override) continues to behave identically — the daemon still ships
+  // standalone Electron-style for users who haven't opted into the platform.
+  //
+  // Production hard-gate: refuse to start when CLERK_DEV_BYPASS=true is set
+  // alongside NODE_ENV=production. The dev bypass middleware is also fail-closed
+  // at request time, but failing fast at boot makes misconfiguration loud.
+  if (process.env.CLERK_DEV_BYPASS === 'true' && process.env.NODE_ENV === 'production') {
+    throw new Error('CLERK_DEV_BYPASS forbidden in production');
+  }
+
+  const tenantRegistryPath = process.env.TENANT_REGISTRY_PATH;
+  if (tenantRegistryPath) {
+    let registry;
+    try {
+      registry = await loadTenantRegistry(tenantRegistryPath);
+    } catch (err) {
+      if (err instanceof RegistryBootError) {
+        // eslint-disable-next-line no-console -- structured boot error log.
+        console.error(
+          JSON.stringify({
+            event: 'registry_boot_error',
+            phase: err.phase,
+            tenant_id: err.tenantId ?? null,
+            message: err.message,
+            details: err.details,
+            timestamp: new Date().toISOString(),
+          }),
+        );
+      } else {
+        console.error('[od] tenant registry load failed:', err);
+      }
+      process.exit(1);
+    }
+
+    // /api/health is platform-operational — must respond on the platform host
+    // (no tenant context, no Clerk session) so health checks and load balancers
+    // do not need per-tenant credentials. Wire it BEFORE the tenant middleware
+    // so it bypasses subdomain resolution entirely.
+    app.get('/api/health', (_req, res) => {
+      res.json({ ok: true, version: '0.1.0' });
+    });
+
+    // Composed tenant pipeline. The dev-mode short-circuit (NEVER in prod)
+    // runs first. When it activates (CLERK_DEV_BYPASS=true, dev env, valid
+    // ?dev_tenant), it establishes ctx and skips the production resolver.
+    // When it defers, the production resolver runs (subdomain → registry →
+    // Clerk JWT → ctx). Wired as a single Express handler so the bypass can
+    // skip the resolver — Express has no "skip one middleware" primitive.
+    const devBypass = devTenantBypassMiddleware(registry);
+    const resolver = tenantResolverMiddleware({ registry });
+    app.use((req, res, next) => {
+      devBypass(req, res, (deferOrErr) => {
+        if (deferOrErr instanceof Error) {
+          next(deferOrErr);
+          return;
+        }
+        // Bypass middleware calls next() with no args in two cases:
+        //   - Defer (no ctx established) → run the production resolver.
+        //   - Activate (ctx already established via runWithTenantContext) →
+        //     skip the resolver and run the rest of the pipeline.
+        // It distinguishes them via the `__od_bypass_active` flag set on the
+        // request just before calling next() inside the AsyncLocalStorage scope.
+        if ((req as { __od_bypass_active?: boolean }).__od_bypass_active === true) {
+          next();
+          return;
+        }
+        resolver(req, res, next);
+      });
+    });
+  }
+
   if (fs.existsSync(STATIC_DIR)) {
     app.use(express.static(STATIC_DIR));
   }
 
-  app.get('/api/health', async (_req, res) => {
-    const versionInfo = await readCurrentAppVersionInfo();
-    res.json({ ok: true, version: versionInfo.version });
-  });
+  // from 3ceca12b: in multi-tenant mode, /api/health is wired earlier (before
+  // tenant middleware) so health checks bypass tenant resolution. Skip the
+  // legacy single-tenant registration in that case.
+  if (!tenantRegistryPath) {
+    app.get('/api/health', async (_req, res) => {
+      const versionInfo = await readCurrentAppVersionInfo();
+      res.json({ ok: true, version: versionInfo.version });
+    });
+  }
 
   app.get('/api/version', async (_req, res) => {
     const version = await readCurrentAppVersionInfo();
