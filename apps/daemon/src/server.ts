@@ -1142,10 +1142,16 @@ export async function startServer({ port = 7456, host = process.env.OD_BIND_HOST
     app.use(express.static(STATIC_DIR));
   }
 
-  app.get('/api/health', async (_req, res) => {
+  // BUG-3 (spec-101 follow-up): boot helpers + monitoring probes follow the
+  // legacy `/healthz` convention. Alias both routes onto a single handler so
+  // /tmp/boot-od-daemon.sh and external probes get the same payload.
+  // Refs: openclaw#236 follow-up
+  const healthHandler = async (_req, res) => {
     const versionInfo = await readCurrentAppVersionInfo();
     res.json({ ok: true, version: versionInfo.version });
-  });
+  };
+  app.get('/api/health', healthHandler);
+  app.get('/healthz', healthHandler);
 
   app.get('/api/version', async (_req, res) => {
     const version = await readCurrentAppVersionInfo();
