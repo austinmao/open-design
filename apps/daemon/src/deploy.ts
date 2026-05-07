@@ -190,6 +190,15 @@ export async function deployToVercel({ config, files, projectId }) {
     throw new DeployError('Vercel token is required.', 400);
   }
 
+  // Multi-tenant prefix (lumina spec-101): when OD_DAEMON_TENANT_ID is set,
+  // emit `od-{tenant}-{projectId}` so URLs match the openclaw wedge regex
+  // `^https://od-{tenant}-[a-zA-Z0-9_-]+\\.`. Backward-compatible: unset env
+  // falls back to `od-{projectId}` (single-tenant local OSS default).
+  const tenantPrefix = (process.env.OD_DAEMON_TENANT_ID || '').trim();
+  const projectName = tenantPrefix
+    ? `od-${tenantPrefix}-${projectId}`
+    : `od-${projectId}`;
+
   const createResp = await fetch(`${VERCEL_API}/v13/deployments${vercelTeamQuery(config)}`, {
     method: 'POST',
     headers: {
@@ -197,7 +206,7 @@ export async function deployToVercel({ config, files, projectId }) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      name: safeVercelProjectName(`od-${projectId}`),
+      name: safeVercelProjectName(projectName),
       files: files.map((f) => ({
         file: f.file,
         data: Buffer.from(f.data).toString('base64'),
