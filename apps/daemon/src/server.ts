@@ -2342,6 +2342,19 @@ export async function startServer({
       );
     }
 
+    // Spec 112 — multi-tenant REST API for the openclaw open-design-create
+    // skill. Mounted BEFORE the tenant resolver so the x-api-key auth path
+    // bypasses Clerk JWT (the skill is a server-to-server caller without a
+    // browser session). Requests without an x-api-key header fall through
+    // (next()) to the tenant resolver below, preserving the UI flow.
+    mountApiProjectsRoutes(app, {
+      db,
+      projectsDir: PROJECTS_DIR,
+      insertProject,
+      getProject,
+      registry,
+    });
+
     // Composed tenant pipeline. The dev-mode short-circuit (NEVER in prod)
     // runs first. When it activates (CLERK_DEV_BYPASS=true, dev env, valid
     // ?dev_tenant), it establishes ctx and skips the production resolver.
@@ -2397,6 +2410,20 @@ export async function startServer({
     requireLocalDaemonRequest,
     composio: composioConnectorProvider,
   });
+
+  // Spec 112 — multi-tenant REST API for the openclaw open-design-create
+  // skill. In legacy (single-tenant) mode this is the only mount point.
+  // In multi-tenant mode the mount happens above, BEFORE the tenant resolver
+  // (so x-api-key requests bypass Clerk JWT). Skip the duplicate here when
+  // the multi-tenant pipeline is wired.
+  if (!tenantRegistryPath) {
+    mountApiProjectsRoutes(app, {
+      db,
+      projectsDir: PROJECTS_DIR,
+      insertProject,
+      getProject,
+    });
+  }
 
   // ---- Projects (DB-backed) -------------------------------------------------
 
