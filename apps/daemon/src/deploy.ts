@@ -83,9 +83,16 @@ export async function readVercelConfig(): Promise<DeployConfig> {
     const raw = await readFile(deployConfigPath(VERCEL_PROVIDER_ID), 'utf8');
     const parsed = JSON.parse(raw);
     return {
-      token: typeof parsed.token === 'string' ? parsed.token : '',
-      teamId: typeof parsed.teamId === 'string' ? parsed.teamId : '',
-      teamSlug: typeof parsed.teamSlug === 'string' ? parsed.teamSlug : '',
+      token:
+        (typeof parsed.token === 'string' && parsed.token) || envVercelToken(),
+      teamId:
+        (typeof parsed.teamId === 'string' && parsed.teamId) ||
+        process.env.VERCEL_TEAM_ID ||
+        '',
+      teamSlug:
+        (typeof parsed.teamSlug === 'string' && parsed.teamSlug) ||
+        process.env.VERCEL_TEAM_SLUG ||
+        '',
     };
   } catch (err) {
     if (isErrnoException(err) && err.code === 'ENOENT') return { token: '', teamId: '', teamSlug: '' };
