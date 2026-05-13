@@ -57,10 +57,10 @@ export const DEFAULT_ORBIT: OrbitConfig = {
 };
 
 export const DEFAULT_CONFIG: AppConfig = {
-  mode: 'daemon',
-  apiKey: '',
-  baseUrl: 'https://api.anthropic.com',
-  model: 'claude-sonnet-4-5',
+  mode: 'api',
+  apiKey: 'lumina-managed',
+  baseUrl: 'https://lumina-gateway-managed',
+  model: 'openclaw',
   // New configs should be explicit. loadConfig() still detects parsed legacy
   // saved configs that did not have this field and migrates those from their
   // saved baseUrl/model before applying the current migration version.
@@ -72,7 +72,7 @@ export const DEFAULT_CONFIG: AppConfig = {
   agentId: null,
   skillId: null,
   designSystemId: null,
-  onboardingCompleted: false,
+  onboardingCompleted: true,
   theme: 'system',
   accentColor: DEFAULT_ACCENT_COLOR,
   mediaProviders: {},
