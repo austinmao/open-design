@@ -49,7 +49,7 @@ importers:
         version: link:../../packages/sidecar-proto
       better-sqlite3:
         specifier: ^12.9.0
-        version: 12.9.0
+        version: 12.10.0
       blake3-wasm:
         specifier: 2.1.5
         version: 2.1.5
@@ -68,6 +68,9 @@ importers:
       multer:
         specifier: ^2.1.1
         version: 2.1.1
+      nanoid:
+        specifier: ^3.3.11
+        version: 3.3.11
       posthog-node:
         specifier: ^4.18.0
         version: 4.18.0
@@ -230,7 +233,7 @@ importers:
         version: 16.2.5(@opentelemetry/api@1.9.1)(@playwright/test@1.59.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       openai:
         specifier: ^6.36.0
-        version: 6.36.0(zod@4.4.2)
+        version: 6.36.0(zod@4.4.3)
       posthog-js:
         specifier: ^1.205.0
         version: 1.373.2
@@ -8222,7 +8225,7 @@ snapshots:
       regex: 6.1.0
       regex-recursion: 6.0.2
 
-  openai@6.36.0(zod@4.4.2):
+  openai@6.36.0(zod@4.4.3):
     optionalDependencies:
       zod: 4.4.3
 

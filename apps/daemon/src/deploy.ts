@@ -11,6 +11,28 @@ import { readProjectFile, validateProjectPath } from './projects.js';
 // on every API boundary. The regex matches data-paths.ts PROJECT_ID_RE.
 const PROJECT_ID_RE = /^[a-zA-Z0-9_-]+$/;
 
+// Spec 101 — daemon-side tenant context threaded through Vercel calls so
+// project naming (od-<tenant_id>-<slug>) and team scoping (vercel_team)
+// are server-derived, not request-supplied. Optional for non-tenant paths.
+type DeployCtx = { tenant_id?: string; vercel_team?: string };
+
+export function assertProjectIdValid(id: unknown): asserts id is string {
+  if (typeof id !== 'string' || id.length === 0) {
+    throw new DeployError('projectId must be a non-empty string.', 400);
+  }
+  if (!PROJECT_ID_RE.test(id)) {
+    throw new DeployError('projectId contains invalid characters.', 400);
+  }
+}
+
+// v7 fix: env-var fallback when ~/.open-design/vercel.json is missing OR
+// when a given field is empty in the JSON file. Lets daemon containers run
+// without a persistent ~/.open-design/ volume — operators set env on host
+// and Lumina-managed deploys just work.
+function envVercelToken(): string {
+  return process.env.VERCEL_API_TOKEN || process.env.VERCEL_TOKEN || '';
+}
+
 export const VERCEL_PROVIDER_ID = 'vercel-self';
 export const CLOUDFLARE_PAGES_PROVIDER_ID = 'cloudflare-pages';
 export const SAVED_TOKEN_MASK = 'saved-vercel-token';
@@ -353,7 +375,7 @@ export async function buildDeployFileSet(projectsRoot: string, projectId: string
   return plan.files;
 }
 
-export async function deployToVercel({ config, files, projectId }: { config: DeployConfig; files: DeployFile[]; projectId: string }) {
+export async function deployToVercel({ config, files, projectId, ctx }: { config: DeployConfig; files: DeployFile[]; projectId: string; ctx?: DeployCtx }) {
   if (!config?.token) {
     throw new DeployError('Vercel token is required.', 400);
   }
@@ -371,7 +393,7 @@ export async function deployToVercel({ config, files, projectId }: { config: Dep
       // Project name is composed server-side from ctx.tenant_id (trusted,
       // resolved from subdomain + Clerk JWT) plus the server-generated
       // projectId. Never derived from request body.
-      name: safeVercelProjectName(`od-${ctx.tenant_id}-${projectId}`),
+      name: safeVercelProjectName(`od-${ctx?.tenant_id ?? 'noctx'}-${projectId}`),
       files: files.map((f) => ({
         file: f.file,
         data: Buffer.from(f.data).toString('base64'),
@@ -423,6 +445,26 @@ export async function deployToVercel({ config, files, projectId }: { config: Dep
     statusMessage: link.statusMessage,
     reachableAt: link.reachableAt,
   };
+}
+
+// Spec 101 BUG-2 durable fix: daemon-spawned od-* projects inherit team-default
+// Deployment Protection (SSO wall) on first deploy. Wedge artifacts must be
+// PUBLIC. PATCH /v9/projects/<id> with { ssoProtection: null }. Idempotent on
+// already-disabled. Caller wraps in .catch(() => {}) — best-effort.
+async function disableProjectSsoProtection(config: DeployConfig, ctx: DeployCtx | undefined, projectId: string) {
+  const resp = await fetch(`${VERCEL_API}/v9/projects/${projectId}${vercelTeamQuery(config, ctx)}`, {
+    method: 'PATCH',
+    headers: {
+      Authorization: `Bearer ${config.token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ ssoProtection: null }),
+  });
+  if (!resp.ok) {
+    const body = (await readVercelJson(resp).catch(() => null)) ?? {};
+    throw vercelError(body, resp.status);
+  }
+  return readVercelJson(resp);
 }
 
 export async function listCloudflarePagesZones(config: DeployConfig) {
@@ -1628,7 +1670,7 @@ function referenceSuffix(raw: string) {
   return suffixIdx === -1 ? '' : raw.slice(suffixIdx);
 }
 
-async function pollVercelDeployment(config: DeployConfig, id: string) {
+async function pollVercelDeployment(config: DeployConfig, id: string, ctx?: DeployCtx) {
   let last: JsonObject | null = null;
   for (let i = 0; i < 30; i += 1) {
     await new Promise((resolve) => setTimeout(resolve, i < 5 ? 1000 : 2000));
@@ -1783,7 +1825,7 @@ export function normalizeDeploymentUrl(url: unknown) {
   return /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
 }
 
-function vercelTeamQuery(config: DeployConfig) {
+function vercelTeamQuery(config: DeployConfig, ctx?: DeployCtx) {
   const params = new URLSearchParams();
   // ctx.vercel_team (server-side, registry-derived) wins over config —
   // never trust a request body to choose which team to deploy into.
