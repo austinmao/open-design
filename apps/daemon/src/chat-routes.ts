@@ -630,8 +630,56 @@ export function registerChatRoutes(app: Express, ctx: RegisterChatRoutesDeps) {
   app.post('/api/proxy/anthropic/stream', async (req, res) => {
     /** @type {Partial<ProxyStreamRequest>} */
     const proxyBody = req.body || {};
-    const { baseUrl, apiKey, model, systemPrompt, messages, maxTokens } =
+    let { baseUrl, apiKey, model, systemPrompt, messages, maxTokens } =
       proxyBody;
+
+    // ---- Lumina-managed direct-Anthropic swap (v7) --------------------------
+    // Browser ships sentinel apiKey='lumina-managed' + baseUrl='https://lumina-
+    // gateway-managed' so the operator never sees a real Anthropic key client-
+    // side. Server resolves to ANTHROPIC_API_KEY env and points at
+    // api.anthropic.com directly, BYPASSING the openclaw gateway plugin
+    // pipeline that would otherwise overwrite messages[0] (system prompt) and
+    // break the <artifact> emission contract.
+    //
+    // MUST run before the LUMINA_GATEWAY_URL override below: the LUMINA gateway
+    // is for plugin-routed tenant traffic (chat skills, etc.); the direct-
+    // Anthropic path is for open-design's designer LLM contract.
+    if (apiKey === 'lumina-managed' && baseUrl === 'https://lumina-gateway-managed') {
+      const luminaAnthropicKey = process.env.ANTHROPIC_API_KEY;
+      if (!luminaAnthropicKey) {
+        return sendApiError(res, 502, 'CONFIG_ERROR', 'ANTHROPIC_API_KEY not configured on daemon');
+      }
+      baseUrl = 'https://api.anthropic.com';
+      apiKey = luminaAnthropicKey;
+      // apps/web ships default model 'openclaw' intended for the gateway-
+      // routed path. When the sentinel swap fires we are bypassing the gateway
+      // and talking directly to api.anthropic.com, which does not know that
+      // alias and returns 404 not_found_error. Force a real Anthropic model;
+      // operator-supplied real Anthropic model names (e.g. 'claude-opus-4-5')
+      // pass through unchanged.
+      const LUMINA_DEFAULT_MODEL =
+        process.env.OD_LUMINA_DEFAULT_MODEL || 'claude-sonnet-4-5';
+      if (!model || !model.startsWith('claude-')) {
+        model = LUMINA_DEFAULT_MODEL;
+      }
+      console.log(`[proxy] Lumina-managed direct-anthropic swap active model=${model}`);
+    } else {
+      // ---- Lumina gateway override (spec 100) -------------------------------
+      // When LUMINA_GATEWAY_URL + LUMINA_GATEWAY_TOKEN are set, the daemon
+      // proxy routes 100% of AI calls through the Lumina gateway, ignoring any
+      // user-supplied apiKey/baseUrl. Used for plugin-pipeline traffic.
+      const luminaGatewayUrl = process.env.LUMINA_GATEWAY_URL;
+      const luminaGatewayToken = process.env.LUMINA_GATEWAY_TOKEN;
+      if (luminaGatewayUrl && luminaGatewayToken) {
+        baseUrl = luminaGatewayUrl;
+        apiKey = luminaGatewayToken;
+        console.log('[proxy] Lumina gateway override active');
+      } else if (luminaGatewayUrl || luminaGatewayToken) {
+        // Half-configured — explicit fail so we don't silently leak to user creds.
+        return sendApiError(res, 502, 'CONFIG_ERROR', 'LUMINA_GATEWAY_URL and LUMINA_GATEWAY_TOKEN must both be set or both unset');
+      }
+    }
+
     if (!baseUrl || !apiKey || !model) {
       return sendApiError(
         res,

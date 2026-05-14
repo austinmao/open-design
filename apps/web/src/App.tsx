@@ -415,6 +415,14 @@ export function App() {
           // and let them re-open Settings explicitly via the env pill. Hold
           // the welcome modal until the privacy decision is resolved; the
           // installation id can rotate later without re-opening the banner.
+          //
+          // Lumina fork (spec 100): when VITE_LUMINA_PROXY_MODE=true, the
+          // daemon routes all AI calls server-side via LUMINA_GATEWAY_URL/
+          // LUMINA_GATEWAY_TOKEN. BYOK is invisible to the user — auto-mark
+          // onboarding complete so the welcome modal never appears.
+          if ((import.meta as { env?: Record<string, string | undefined> }).env?.VITE_LUMINA_PROXY_MODE === 'true') {
+            next.onboardingCompleted = true;
+          }
           if (!next.onboardingCompleted && next.privacyDecisionAt != null) {
             setSettingsWelcome(true);
             setSettingsOpen(true);
