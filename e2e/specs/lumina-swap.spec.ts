@@ -247,7 +247,7 @@ test.describe('lumina-swap: direct-Anthropic sentinel swap + artifact emission',
     let proxyStatus = 0;
     const proxyStarted = new Promise<void>((resolve) => {
       page.on('response', (resp) => {
-        if (resp.url().includes('/api/proxy/stream')) {
+        if (resp.url().includes('/api/proxy/anthropic/stream')) {
           proxyStatus = resp.status();
           resolve();
         }
@@ -294,7 +294,7 @@ test.describe('lumina-swap: direct-Anthropic sentinel swap + artifact emission',
     const firstChunk = new Promise<void>((resolve) => {
       // Monitor XHR/fetch responses at the network level.
       page.on('response', async (resp) => {
-        if (!resp.url().includes('/api/proxy/stream')) return;
+        if (!resp.url().includes('/api/proxy/anthropic/stream')) return;
         try {
           // Attempt to read partial body; SSE streams may not have a
           // complete body yet. We check for a non-empty body buffer.
