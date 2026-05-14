@@ -118,7 +118,7 @@ if (argv[0] === 'tools' && argv[1] === 'live-artifacts') {
 } else {
 // Default: daemon mode.
 let port = Number(process.env.OD_PORT) || 7456;
-let host = process.env.OD_BIND_HOST || '127.0.0.1';
+let host = process.env.OD_BIND_HOST || process.env.OD_HOST || '127.0.0.1';
 let open = true;
 
 for (let i = 0; i < argv.length; i++) {
