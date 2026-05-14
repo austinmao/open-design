@@ -518,11 +518,16 @@ describe('Cross-tenant isolation — 8-vector attack matrix (T047-T055)', () => 
       // emit a tenant-discriminating response. Missing cookie → 302 to the
       // cross-domain handshake endpoint (which itself bounces to /sign-in if
       // the primary host has no Clerk session).
+      //
+      // Use a non-/api URL because /api/* requests now return 401 (see
+      // 35a24589 — browsers can't follow cross-origin 302s with credentials
+      // on fetch, so /api/* fails fast with 401 instead).
       setEnvForPrimaryKey();
 
       const result = await invokeResolver({
         host: 'daemon.internal',
         forwardedHost: `${TENANT_B}.opendesign.holalumina.com`,
+        url: '/',
       });
 
       expect(result.captured.status).toBe(302);
