@@ -65,3 +65,6 @@ specs/change/active
 .env.*.local
 # Local design assistant context
 .impeccable.md
+# E2E prod creds + storage state (NEVER commit)
+e2e/.env.prod.local
+e2e/.auth/
