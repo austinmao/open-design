@@ -269,6 +269,11 @@ import {
   isAllowedBrowserOrigin,
   isLocalSameOrigin,
 } from './origin-validation.js';
+import { loadTenantRegistry, RegistryBootError } from './tenants/registry-loader.js';
+import { tenantResolverMiddleware } from './tenants/resolver.js';
+import { devTenantBypassMiddleware } from './dev-tenant-bypass.js';
+import { createHealthzHandler } from './healthz.js';
+import { mountApiProjectsRoutes } from './routes/api-projects.js';
 
 /** @typedef {import('@open-design/contracts').ApiErrorCode} ApiErrorCode */
 /** @typedef {import('@open-design/contracts').ApiError} ApiError */
