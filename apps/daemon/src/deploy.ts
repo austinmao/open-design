@@ -117,7 +117,16 @@ export async function readVercelConfig(): Promise<DeployConfig> {
         '',
     };
   } catch (err) {
-    if (isErrnoException(err) && err.code === 'ENOENT') return { token: '', teamId: '', teamSlug: '' };
+    if (isErrnoException(err) && err.code === 'ENOENT') {
+      // v7 fork fix: when ~/.open-design/vercel.json is missing entirely,
+      // fall through to env vars so daemon containers without a persistent
+      // ~/.open-design/ volume can still deploy. Operators set env on host.
+      return {
+        token: envVercelToken(),
+        teamId: process.env.VERCEL_TEAM_ID || '',
+        teamSlug: process.env.VERCEL_TEAM_SLUG || '',
+      };
+    }
     throw err;
   }
 }

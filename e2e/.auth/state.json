@@ -1,0 +1,154 @@
+{
+  "cookies": [
+    {
+      "name": "_ga",
+      "value": "GA1.1.2144482249.1778779741",
+      "domain": ".holalumina.com",
+      "path": "/",
+      "expires": 1813339741.059181,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "__cf_bm",
+      "value": "4yzvcKZT5I.TP8.4p9gS8.agojv77bMkkBh6lTSzQiY-1778779741-1.0.1.1-3YLyG.9tzpcwqw0szZ2DTT4hVTWtDMFgrLjlF._MWZPqnRcSbNHd83X_zy9w_BpaCmYG1W1qrNjr_rArDeurXuThwFXno7sBBDdqF7Jdqeo",
+      "domain": ".clerk.holalumina.com",
+      "path": "/",
+      "expires": 1778781541.327069,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "_cfuvid",
+      "value": "etGITRy9zWpN1.15c2bvg4B9mHLujf1cJxLZBxW.syA-1778779741336-0.0.1.1-604800000",
+      "domain": ".clerk.holalumina.com",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "__cf_bm",
+      "value": "CUUSdcMWrK2FmtwAEa07jV9bjT.7M71GDRB5uLovuC4-1778779741.8060708-1.0.1.1-GVIXnEot5vEHHOD8LnP03nRfGS8Nepy8g4fVj3vYRsEXUO7CDaiyxAk0tbVLxmcfMle7M3QjJSNHXHlr0z_kZxAbN_RxuEkSyD2xRhW8PM2mv_llDbdRYHbBIR.q1iqH",
+      "domain": ".img.clerk.com",
+      "path": "/",
+      "expires": 1778781541.815839,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "__client",
+      "value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNsaWVudF8zRGl6YVlXTENBT0VCNnhxaXA0WlRCZmtxbHciLCJyb3RhdGluZ190b2tlbiI6ImM3M3diNThnYWFrMG5oejdjanZyZWVvMHYxbXJqMXZxZWE2aTVkMWUifQ.bsR8B_WvjpNF8RQaM1Z4eiwlMUSSYMIyD24UDTxW9PdGXBfvu1rZGvW8mhzO-yeyNNxuEPQbCB2NhcgzF0uyL8bSIibFXSCjWsmwc_yhEyTcuxkBkC-bTOGYOjNzHxAL-k7Yyh5h2oYtS8SIEcrgSDsIx_ajobUAn-WK8LQ6aznCU6eTX336MCvNZrjDpeahpjclxqoF-gNL8RtYI5SBwFk02-N7RSTy2b47FvYp8EqOdZudw4AmzJOd-TGvGhVpihi2jsVkA2c04YWc32pYNvsgPtp2cCkt5A0etYBu2vPyHwVpxVkmbMzztvamyemNfm7kCoEu417UPC9ciPUqWA",
+      "domain": ".clerk.holalumina.com",
+      "path": "/",
+      "expires": 1813339747.838775,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "__client_uat",
+      "value": "1778779747",
+      "domain": ".holalumina.com",
+      "path": "/",
+      "expires": 1813339749.03341,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "__client_uat_c8vUGvu8",
+      "value": "1778779747",
+      "domain": ".holalumina.com",
+      "path": "/",
+      "expires": 1813339749.033437,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "__session",
+      "value": "eyJhbGciOiJSUzI1NiIsImNhdCI6ImNsX0I3ZDRQRDExMUFBQSIsImtpZCI6Imluc18zRGFSNVk4UXdBT0p4M1RBdGlyeFhpNjgxcnMiLCJvaWF0IjoxNzc4Nzc5NzQ4LCJ0eXAiOiJKV1QifQ.eyJhenAiOiJodHRwczovL2FwcC5ob2xhbHVtaW5hLmNvbSIsImV4cCI6MTc3ODc4MDA0OCwiZnZhIjpbMCwwXSwiaWF0IjoxNzc4Nzc5NzQ4LCJpc3MiOiJodHRwczovL2NsZXJrLmhvbGFsdW1pbmEuY29tIiwibmJmIjoxNzc4Nzc5NzM4LCJvIjp7ImlkIjoib3JnXzNEYVRVUVphc2JsaXYxbjRDcU1IODkxMVIweSIsInJvbCI6Im1lbWJlciIsInNsZyI6ImNlcmVtb25pYSJ9LCJzaWQiOiJzZXNzXzNEaXpiSzdWU2dVcjA4VjFTcmZxZmxObFJoRiIsInN0cyI6ImFjdGl2ZSIsInN1YiI6InVzZXJfM0RnWEhYeUw2Y1cydmhscmlwUlJGQVN4TGxiIiwidiI6Mn0.JuOMmJlMtcJbKmXDSokuAR2z2ht3G-KDEQakVDtEqiCTqcfXgVQ0LxzryXVhFMT34amX3alpyJ1fE9-G95XKKXpWS2Bn0k-Rq2fPCRKpTeRk51lYapQ70Dws8uvP_Sx3ej3jR4CZyvUIjuLOQ19db-14XMjsbahDu6uasX3lRwIDaGDwxSP5D_Op8jKK7Ubvsx0ZCvbrCpsLiMkv015gNr69uxsu2beWrIwyu8TZhrSVS4vfFyNA0NJOSFPOC8Jt_9kplNlRcFgVjqoHlFlJgyM80CvjU1sIagmdQVBNehx-zomZ60stDkpYVWKgQ6vjgN0ApPMdrM8pqsbQGdFwsQ",
+      "domain": "app.holalumina.com",
+      "path": "/",
+      "expires": 1810315749,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "__session_c8vUGvu8",
+      "value": "eyJhbGciOiJSUzI1NiIsImNhdCI6ImNsX0I3ZDRQRDExMUFBQSIsImtpZCI6Imluc18zRGFSNVk4UXdBT0p4M1RBdGlyeFhpNjgxcnMiLCJvaWF0IjoxNzc4Nzc5NzQ4LCJ0eXAiOiJKV1QifQ.eyJhenAiOiJodHRwczovL2FwcC5ob2xhbHVtaW5hLmNvbSIsImV4cCI6MTc3ODc4MDA0OCwiZnZhIjpbMCwwXSwiaWF0IjoxNzc4Nzc5NzQ4LCJpc3MiOiJodHRwczovL2NsZXJrLmhvbGFsdW1pbmEuY29tIiwibmJmIjoxNzc4Nzc5NzM4LCJvIjp7ImlkIjoib3JnXzNEYVRVUVphc2JsaXYxbjRDcU1IODkxMVIweSIsInJvbCI6Im1lbWJlciIsInNsZyI6ImNlcmVtb25pYSJ9LCJzaWQiOiJzZXNzXzNEaXpiSzdWU2dVcjA4VjFTcmZxZmxObFJoRiIsInN0cyI6ImFjdGl2ZSIsInN1YiI6InVzZXJfM0RnWEhYeUw2Y1cydmhscmlwUlJGQVN4TGxiIiwidiI6Mn0.JuOMmJlMtcJbKmXDSokuAR2z2ht3G-KDEQakVDtEqiCTqcfXgVQ0LxzryXVhFMT34amX3alpyJ1fE9-G95XKKXpWS2Bn0k-Rq2fPCRKpTeRk51lYapQ70Dws8uvP_Sx3ej3jR4CZyvUIjuLOQ19db-14XMjsbahDu6uasX3lRwIDaGDwxSP5D_Op8jKK7Ubvsx0ZCvbrCpsLiMkv015gNr69uxsu2beWrIwyu8TZhrSVS4vfFyNA0NJOSFPOC8Jt_9kplNlRcFgVjqoHlFlJgyM80CvjU1sIagmdQVBNehx-zomZ60stDkpYVWKgQ6vjgN0ApPMdrM8pqsbQGdFwsQ",
+      "domain": "app.holalumina.com",
+      "path": "/",
+      "expires": 1810315749,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "__session",
+      "value": "eyJhbGciOiJSUzI1NiIsImNhdCI6ImNsX0I3ZDRQRDExMUFBQSIsImtpZCI6Imluc18zRGFSNVk4UXdBT0p4M1RBdGlyeFhpNjgxcnMiLCJvaWF0IjoxNzc4Nzc5NzQ4LCJ0eXAiOiJKV1QifQ.eyJhenAiOiJodHRwczovL2FwcC5ob2xhbHVtaW5hLmNvbSIsImV4cCI6MTc3ODc4MDA0OCwiZnZhIjpbMCwwXSwiaWF0IjoxNzc4Nzc5NzQ4LCJpc3MiOiJodHRwczovL2NsZXJrLmhvbGFsdW1pbmEuY29tIiwibmJmIjoxNzc4Nzc5NzM4LCJvIjp7ImlkIjoib3JnXzNEYVRVUVphc2JsaXYxbjRDcU1IODkxMVIweSIsInJvbCI6Im1lbWJlciIsInNsZyI6ImNlcmVtb25pYSJ9LCJzaWQiOiJzZXNzXzNEaXpiSzdWU2dVcjA4VjFTcmZxZmxObFJoRiIsInN0cyI6ImFjdGl2ZSIsInN1YiI6InVzZXJfM0RnWEhYeUw2Y1cydmhscmlwUlJGQVN4TGxiIiwidiI6Mn0.JuOMmJlMtcJbKmXDSokuAR2z2ht3G-KDEQakVDtEqiCTqcfXgVQ0LxzryXVhFMT34amX3alpyJ1fE9-G95XKKXpWS2Bn0k-Rq2fPCRKpTeRk51lYapQ70Dws8uvP_Sx3ej3jR4CZyvUIjuLOQ19db-14XMjsbahDu6uasX3lRwIDaGDwxSP5D_Op8jKK7Ubvsx0ZCvbrCpsLiMkv015gNr69uxsu2beWrIwyu8TZhrSVS4vfFyNA0NJOSFPOC8Jt_9kplNlRcFgVjqoHlFlJgyM80CvjU1sIagmdQVBNehx-zomZ60stDkpYVWKgQ6vjgN0ApPMdrM8pqsbQGdFwsQ",
+      "domain": ".ceremonia.opendesign.holalumina.com",
+      "path": "/",
+      "expires": 1781371749.324026,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_ga_2J96W563BC",
+      "value": "GS2.1.s1778779741$o1$g1$t1778779749$j52$l0$h0",
+      "domain": ".holalumina.com",
+      "path": "/",
+      "expires": 1813339749.354086,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    }
+  ],
+  "origins": [
+    {
+      "origin": "https://ceremonia.opendesign.holalumina.com",
+      "localStorage": [
+        {
+          "name": "open-design:pet-rail-collapsed",
+          "value": "0"
+        },
+        {
+          "name": "od:designs:view",
+          "value": "grid"
+        },
+        {
+          "name": "open-design:analytics.anonymous_id",
+          "value": "764cdcec-3306-49e2-b1f4-abb7f89a4a33"
+        },
+        {
+          "name": "od-entry-sidebar-width",
+          "value": "380"
+        },
+        {
+          "name": "open-design:pet-position",
+          "value": "{\"right\":24,\"bottom\":24}"
+        },
+        {
+          "name": "open-design:config",
+          "value": "{\"mode\":\"api\",\"apiKey\":\"lumina-managed\",\"baseUrl\":\"https://lumina-gateway-managed\",\"model\":\"openclaw\",\"apiProtocol\":\"anthropic\",\"apiVersion\":\"\",\"apiProtocolConfigs\":{},\"configMigrationVersion\":1,\"apiProviderBaseUrl\":\"https://api.anthropic.com\",\"agentId\":null,\"skillId\":null,\"designSystemId\":null,\"onboardingCompleted\":true,\"theme\":\"system\",\"accentColor\":\"#c96442\",\"mediaProviders\":{},\"composio\":{\"apiKey\":\"\",\"apiKeyConfigured\":false,\"apiKeyTail\":\"\"},\"agentModels\":{},\"agentCliEnv\":{},\"pet\":{\"adopted\":false,\"enabled\":false,\"petId\":\"mochi\",\"custom\":{\"name\":\"Buddy\",\"glyph\":\"🦄\",\"accent\":\"#c96442\",\"greeting\":\"Hi! I am here whenever you need me.\"}},\"notifications\":{\"soundEnabled\":false,\"successSoundId\":\"ding\",\"failureSoundId\":\"buzz\",\"desktopEnabled\":false},\"orbit\":{\"enabled\":false,\"time\":\"08:00\",\"templateSkillId\":\"orbit-general\"}}"
+        }
+      ]
+    },
+    {
+      "origin": "https://app.holalumina.com",
+      "localStorage": [
+        {
+          "name": "__clerk_environment",
+          "value": "{\"value\":{\"object\":\"environment\",\"auth_config\":{\"claimed_at\":null,\"id\":\"\",\"object\":\"auth_config\",\"reverification\":true,\"single_session_mode\":true,\"session_minter\":false},\"display_config\":{\"object\":\"display_config\",\"after_create_organization_url\":\"https://app.holalumina.com\",\"after_join_waitlist_url\":\"https://app.holalumina.com\",\"after_leave_organization_url\":\"https://app.holalumina.com\",\"after_sign_in_url\":\"https://app.holalumina.com\",\"after_sign_out_all_url\":\"https://accounts.holalumina.com/sign-in\",\"after_sign_out_one_url\":\"https://accounts.holalumina.com/sign-in/choose\",\"after_sign_up_url\":\"https://app.holalumina.com\",\"after_switch_session_url\":\"https://app.holalumina.com\",\"application_name\":\"Lumina OS\",\"branded\":true,\"captcha_heartbeat\":false,\"captcha_oauth_bypass\":[],\"captcha_provider\":\"turnstile\",\"captcha_public_key_invisible\":\"0x4AAAAAAAFV93qQdS0ycilX\",\"captcha_public_key\":\"0x4AAAAAAAWXJGBD7bONzLBd\",\"captcha_widget_type\":\"smart\",\"clerk_js_version\":\"5\",\"create_organization_url\":\"https://accounts.holalumina.com/create-organization\",\"favicon_image_url\":\"\",\"google_one_tap_client_id\":\"674204778174-3006g6tm6gj0c8n2a3elpghhi1ov9h9v.apps.googleusercontent.com\",\"home_url\":\"https://app.holalumina.com\",\"id\":\"display_config_3DaR5cd3khj048XhY4Uo1WVAlt4\",\"instance_environment_type\":\"production\",\"logo_image_url\":\"\",\"organization_profile_url\":\"https://accounts.holalumina.com/organization\",\"preferred_sign_in_strategy\":\"password\",\"privacy_policy_url\":\"\",\"show_devmode_warning\":false,\"sign_in_url\":\"https://accounts.holalumina.com/sign-in\",\"sign_up_url\":\"https://accounts.holalumina.com/sign-up\",\"support_email\":\"\",\"terms_url\":\"\",\"theme\":{\"buttons\":{\"font_color\":\"#ffffff\",\"font_family\":\"\\\"Source Sans Pro\\\", sans-serif\",\"font_weight\":\"600\"},\"general\":{\"color\":\"#6c47ff\",\"padding\":\"1em\",\"box_shadow\":\"0 2px 8px rgba(0, 0, 0, 0.2)\",\"font_color\":\"#151515\",\"font_family\":\"\\\"Source Sans Pro\\\", sans-serif\",\"border_radius\":\"0.5em\",\"background_color\":\"#ffffff\",\"label_font_weight\":\"600\"},\"accounts\":{\"background_color\":\"#ffffff\"}},\"user_profile_url\":\"https://accounts.holalumina.com/user\",\"waitlist_url\":\"https://accounts.holalumina.com/waitlist\"},\"id\":\"\",\"maintenance_mode\":false,\"client_debug_mode\":false,\"partitioned_cookies\":false,\"organization_settings\":{\"actions\":{\"admin_delete\":true},\"domains\":{\"enabled\":false,\"enrollment_modes\":[],\"default_role\":\"org:member\"},\"enabled\":true,\"max_allowed_memberships\":5},\"user_settings\":{\"actions\":{\"delete_self\":true,\"create_organization\":true,\"create_organizations_limit\":null},\"attributes\":{\"email_address\":{\"enabled\":true,\"required\":true,\"used_for_first_factor\":true,\"first_factors\":[\"email_code\"],\"used_for_second_factor\":false,\"second_factors\":[],\"verifications\":[\"email_code\"],\"verify_at_sign_up\":true,\"immutable\":false,\"name\":\"email_address\"},\"phone_number\":{\"enabled\":true,\"required\":true,\"used_for_first_factor\":true,\"first_factors\":[\"phone_code\"],\"used_for_second_factor\":true,\"second_factors\":[\"phone_code\"],\"verifications\":[\"phone_code\"],\"verify_at_sign_up\":true,\"immutable\":false,\"name\":\"phone_number\"},\"username\":{\"enabled\":false,\"required\":false,\"used_for_first_factor\":false,\"first_factors\":[],\"used_for_second_factor\":false,\"second_factors\":[],\"verifications\":[],\"verify_at_sign_up\":false,\"immutable\":false,\"name\":\"username\"},\"web3_wallet\":{\"enabled\":false,\"required\":false,\"used_for_first_factor\":false,\"first_factors\":[],\"used_for_second_factor\":false,\"second_factors\":[],\"verifications\":[],\"verify_at_sign_up\":false,\"immutable\":false,\"name\":\"web3_wallet\"},\"first_name\":{\"enabled\":true,\"required\":false,\"used_for_first_factor\":false,\"first_factors\":[],\"used_for_second_factor\":false,\"second_factors\":[],\"verifications\":[],\"verify_at_sign_up\":false,\"immutable\":false,\"name\":\"first_name\"},\"last_name\":{\"enabled\":true,\"required\":false,\"used_for_first_factor\":false,\"first_factors\":[],\"used_for_second_factor\":false,\"second_factors\":[],\"verifications\":[],\"verify_at_sign_up\":false,\"immutable\":false,\"name\":\"last_name\"},\"password\":{\"enabled\":true,\"required\":true,\"used_for_first_factor\":false,\"first_factors\":[],\"used_for_second_factor\":false,\"second_factors\":[],\"verifications\":[],\"verify_at_sign_up\":false,\"immutable\":false,\"name\":\"password\"},\"authenticator_app\":{\"enabled\":false,\"required\":false,\"used_for_first_factor\":false,\"first_factors\":[],\"used_for_second_factor\":false,\"second_factors\":[],\"verifications\":[],\"verify_at_sign_up\":false,\"immutable\":false,\"name\":\"authenticator_app\"},\"ticket\":{\"enabled\":true,\"required\":false,\"used_for_first_factor\":false,\"first_factors\":[],\"used_for_second_factor\":false,\"second_factors\":[],\"verifications\":[],\"verify_at_sign_up\":false,\"immutable\":false,\"name\":\"ticket\"},\"backup_code\":{\"enabled\":false,\"required\":false,\"used_for_first_factor\":false,\"first_factors\":[],\"used_for_second_factor\":false,\"second_factors\":[],\"verifications\":[],\"verify_at_sign_up\":false,\"immutable\":false,\"name\":\"backup_code\"},\"passkey\":{\"enabled\":false,\"required\":false,\"used_for_first_factor\":false,\"first_factors\":[],\"used_for_second_factor\":false,\"second_factors\":[],\"verifications\":[],\"verify_at_sign_up\":false,\"immutable\":false,\"name\":\"passkey\"}},\"passkey_settings\":{\"allow_autofill\":true,\"show_sign_in_button\":true},\"password_settings\":{\"disable_hibp\":false,\"min_length\":8,\"max_length\":72,\"require_special_char\":false,\"require_numbers\":false,\"require_uppercase\":false,\"require_lowercase\":false,\"show_zxcvbn\":false,\"min_zxcvbn_strength\":0,\"enforce_hibp_on_sign_in\":true,\"allowed_special_characters\":\"!\\\"#$%&'()*+,-./:;<=>?@[]^_`{|}~\"},\"sign_in\":{\"second_factor\":{\"required\":false}},\"sign_up\":{\"captcha_enabled\":true,\"captcha_widget_type\":\"smart\",\"custom_action_required\":false,\"progressive\":true,\"mode\":\"public\",\"legal_consent_enabled\":false,\"mfa\":{\"required\":false}},\"social\":{\"oauth_apple\":{\"enabled\":false,\"required\":false,\"authenticatable\":true,\"block_email_subaddresses\":false,\"strategy\":\"oauth_apple\",\"not_selectable\":false,\"deprecated\":false,\"name\":\"Apple\",\"logo_url\":\"https://img.clerk.com/static/apple.png\"},\"oauth_google\":{\"enabled\":true,\"required\":false,\"authenticatable\":true,\"block_email_subaddresses\":true,\"strategy\":\"oauth_google\",\"not_selectable\":false,\"deprecated\":false,\"name\":\"Google\",\"logo_url\":\"https://img.clerk.com/static/google.png\"}}},\"commerce_settings\":{\"billing\":{\"stripe_publishable_key\":null,\"organization\":{\"enabled\":false,\"has_paid_plans\":false},\"user\":{\"enabled\":false,\"has_paid_plans\":false}}},\"api_keys_settings\":{\"user_api_keys_enabled\":false,\"orgs_api_keys_enabled\":false},\"protect_config\":{\"object\":\"protect_config\",\"id\":\"\"}},\"exp\":1778866141178}"
+        }
+      ]
+    }
+  ]
+}
