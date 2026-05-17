@@ -60,6 +60,7 @@ import {
 } from './memory-extractions.js';
 import { attachAcpSession } from './acp.js';
 import { attachPiRpcSession } from './pi-rpc.js';
+import { registerLuminaOpenClawRoutes } from './lumina-openclaw-routes.js';
 import { createClaudeStreamHandler } from './claude-stream.js';
 import { diagnoseClaudeCliFailure } from './claude-diagnostics.js';
 import { loadCritiqueConfigFromEnv } from './critique/config.js';
@@ -2112,6 +2113,40 @@ export async function startServer({
   const extraAllowedOrigins = configuredAllowedOrigins();
   const app = express();
   app.use(express.json({ limit: '4mb' }));
+
+  // OD-as-Lumina-shell spike (spec 113-phase-c): mount lumina-openclaw bridge
+  // route when env wiring is present. Skipped silently otherwise. Tenant slug
+  // is bound at boot, NOT inferred from request body — prevents cross-tenant
+  // smuggling.
+  {
+    const luminaUrl = process.env.LUMINA_OPENCLAW_BASE_URL;
+    const luminaSecret = process.env.OD_S2S_HMAC_SECRET;
+    const luminaTenant = process.env.OD_S2S_TENANT_SLUG;
+    if (luminaUrl && luminaSecret && luminaTenant) {
+      try {
+        registerLuminaOpenClawRoutes(app, {
+          tenantSlug: luminaTenant,
+          luminaOpenClawBaseUrl: luminaUrl,
+          hmacSecret: luminaSecret,
+        });
+        // eslint-disable-next-line no-console
+        console.log(
+          JSON.stringify({
+            event: 'lumina_openclaw_routes_registered',
+            tenantSlug: luminaTenant,
+          }),
+        );
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error(
+          JSON.stringify({
+            event: 'lumina_openclaw_routes_failed',
+            error: String(err),
+          }),
+        );
+      }
+    }
+  }
 
   // Multi-directory scanning shared by every skill / template surface. The
   // helpers delegate to listSkills(roots) which walks roots in priority
