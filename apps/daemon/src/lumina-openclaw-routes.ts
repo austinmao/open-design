@@ -56,18 +56,28 @@ export function registerLuminaOpenClawRoutes(
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort('timeout'), timeoutMs);
 
+    const outboundHeaders: Record<string, string> = {
+      'Content-Type': 'application/json',
+      'x-od-tenant': tenantSlug,
+      'x-hub-timestamp': String(ts),
+      'x-hub-signature': signature,
+    };
+    // Spike-only: hit Vercel preview deployments behind Deployment Protection.
+    // VERCEL_PROTECTION_BYPASS in daemon env = project bypass token. No-op on
+    // un-protected deployments. Header is per-request — never logged.
+    const bypass = process.env.VERCEL_PROTECTION_BYPASS;
+    if (bypass) {
+      outboundHeaders['x-vercel-protection-bypass'] = bypass;
+      outboundHeaders['x-vercel-set-bypass-cookie'] = 'samesitenone';
+    }
+
     let upstream: any;
     try {
       upstream = await fetch(
         `${luminaOpenClawBaseUrl.replace(/\/+$/, '')}/api/lumina/od-chat`,
         {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-od-tenant': tenantSlug,
-            'x-hub-timestamp': String(ts),
-            'x-hub-signature': signature,
-          },
+          headers: outboundHeaders,
           body: rawBody,
           signal: controller.signal,
         },
