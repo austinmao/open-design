@@ -68,7 +68,10 @@ export function registerLuminaOpenClawRoutes(
     const bypass = process.env.VERCEL_PROTECTION_BYPASS;
     if (bypass) {
       outboundHeaders['x-vercel-protection-bypass'] = bypass;
-      outboundHeaders['x-vercel-set-bypass-cookie'] = 'samesitenone';
+      // NOTE: x-vercel-set-bypass-cookie causes Vercel to issue a Set-Cookie
+      // + redirect. Node's undici fetch then loops to "redirect count
+      // exceeded" because each redirect repeats the cookie-set. Header
+      // omitted — programmatic callers don't carry cookies anyway.
     }
 
     let upstream: any;
