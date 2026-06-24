@@ -169,6 +169,14 @@ export function isLocalSameOrigin(
   const localHostAllowed = isAllowedBrowserHost(host, ports, bindHost, ipOnlyExtraOrigins);
   if (origin == null || origin === '') {
     if (localHostAllowed) return true;
+    // Trusted reverse-proxy topology (the lumina shared edge): the proxy
+    // strips the browser Origin/Sec-Fetch-Site and authenticates every request
+    // (session + per-workspace machine token) before dialing the daemon over a
+    // private network, so the daemon only ever sees the upstream dial host and
+    // no Origin. OD_TRUST_PROXY=1 attests this topology, so a no-Origin request
+    // is treated as a trusted same-origin proxied request. Opt-in: default-off
+    // preserves the standalone Host-based defense for direct-exposure installs.
+    if (env.OD_TRUST_PROXY === '1') return true;
     // Browsers (Firefox, Chrome) omit Origin on same-origin GET subresource
     // requests per the Fetch spec, which made hostname entries in
     // OD_ALLOWED_ORIGINS unreachable for legitimate same-origin GETs

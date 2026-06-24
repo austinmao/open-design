@@ -308,6 +308,35 @@ describe('daemon origin validation middleware', () => {
     }
   });
 
+  it('allows no-Origin guarded routes behind a trusted proxy when OD_TRUST_PROXY=1', async () => {
+    // The lumina edge dials the daemon over a private network, stripping the
+    // browser Origin/Sec-Fetch-Site and authenticating every request first.
+    // The daemon then sees the upstream dial host and no Origin. OD_TRUST_PROXY
+    // attests this topology so the no-Origin request is treated as trusted.
+    process.env.OD_TRUST_PROXY = '1';
+    try {
+      const res = await request(port, 'POST', '/api/active', {
+        headers: {
+          Host: 'od-7bc1bcca.railway.internal:7456',
+          'content-type': 'application/json',
+        },
+      });
+      expect(res.status).toBe(200);
+    } finally {
+      delete process.env.OD_TRUST_PROXY;
+    }
+  });
+
+  it('still blocks no-Origin guarded routes from a non-loopback host without OD_TRUST_PROXY', async () => {
+    const res = await request(port, 'POST', '/api/active', {
+      headers: {
+        Host: 'od-7bc1bcca.railway.internal:7456',
+        'content-type': 'application/json',
+      },
+    });
+    expect(res.status).toBe(403);
+  });
+
   // --- Origin: null (sandboxed iframe previews) ---
 
   it('allows Origin: null for GET raw-file preview routes', async () => {
