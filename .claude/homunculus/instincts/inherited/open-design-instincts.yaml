@@ -1,0 +1,317 @@
+# Instincts generated from https://github.com/austinmao/open-design
+# Generated: 2026-07-19T10:06:08.679Z
+# Version: 2.0
+# NOTE: This file supplements (does not replace) any existing curated instincts.
+# High-confidence manually curated instincts should be preserved alongside these.
+
+---
+id: open-design-commit-conventional
+trigger: "when writing a commit message"
+confidence: 0.85
+domain: git
+source: repo-analysis
+source_repo: https://github.com/austinmao/open-design
+---
+
+# Open Design Commit Conventional
+
+## Action
+
+Use conventional commit format with prefixes: fix
+
+## Evidence
+
+- 1 commits analyzed
+- Detected conventional commit pattern
+- Examples: fix(daemon): support authenticated proxy browser routes
+
+---
+id: open-design-commit-length
+trigger: "when writing a commit message"
+confidence: 0.6
+domain: git
+source: repo-analysis
+source_repo: https://github.com/austinmao/open-design
+---
+
+# Open Design Commit Length
+
+## Action
+
+Write moderate-length commit messages (~55 characters)
+
+## Evidence
+
+- Average commit message length: 55 chars
+- Based on 1 commits
+
+---
+id: open-design-naming-files
+trigger: "when creating a new file"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/austinmao/open-design
+---
+
+# Open Design Naming Files
+
+## Action
+
+Use camelCase naming convention
+
+## Evidence
+
+- Analyzed file naming patterns in repository
+- Dominant pattern: camelCase
+
+---
+id: open-design-import-relative
+trigger: "when importing modules"
+confidence: 0.75
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/austinmao/open-design
+---
+
+# Open Design Import Relative
+
+## Action
+
+Use relative imports for project files
+
+## Evidence
+
+- Import analysis shows relative import pattern
+- Example: import { x } from '../lib/x'
+
+---
+id: open-design-export-style
+trigger: "when exporting from a module"
+confidence: 0.7
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/austinmao/open-design
+---
+
+# Open Design Export Style
+
+## Action
+
+Prefer named exports
+
+## Evidence
+
+- Export pattern analysis
+- Dominant style: named
+
+---
+id: open-design-instinct-file-naming-camelCase
+trigger: "When creating a new file"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: austinmao/open-design
+---
+
+# Open Design Instinct File Naming CamelCase
+
+## Action
+
+Name the file using camelCase
+
+## Evidence
+
+- Pattern in namingConventions.files: camelCase
+
+---
+id: open-design-instinct-function-naming-camelCase
+trigger: "When defining a new function"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: austinmao/open-design
+---
+
+# Open Design Instinct Function Naming CamelCase
+
+## Action
+
+Name the function using camelCase
+
+## Evidence
+
+- Pattern in namingConventions.functions: camelCase
+
+---
+id: open-design-instinct-class-naming-pascalCase
+trigger: "When defining a new class"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: austinmao/open-design
+---
+
+# Open Design Instinct Class Naming PascalCase
+
+## Action
+
+Name the class using PascalCase
+
+## Evidence
+
+- Pattern in namingConventions.classes: PascalCase
+
+---
+id: open-design-instinct-constant-naming-screaming-snake-case
+trigger: "When defining a constant"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: austinmao/open-design
+---
+
+# Open Design Instinct Constant Naming Screaming Snake Case
+
+## Action
+
+Name the constant using SCREAMING_SNAKE_CASE
+
+## Evidence
+
+- Pattern in namingConventions.constants: SCREAMING_SNAKE_CASE
+
+---
+id: open-design-instinct-import-style-relative
+trigger: "When importing modules"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: austinmao/open-design
+---
+
+# Open Design Instinct Import Style Relative
+
+## Action
+
+Use relative import paths
+
+## Evidence
+
+- Pattern in importStyle: relative
+
+---
+id: open-design-instinct-export-style-named
+trigger: "When exporting modules or functions"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: austinmao/open-design
+---
+
+# Open Design Instinct Export Style Named
+
+## Action
+
+Use named exports
+
+## Evidence
+
+- Pattern in exportStyle: named
+
+---
+id: open-design-instinct-commit-prefix-fix
+trigger: "When writing a commit message for a bug fix"
+confidence: 0.9
+domain: git
+source: repo-analysis
+source_repo: austinmao/open-design
+---
+
+# Open Design Instinct Commit Prefix Fix
+
+## Action
+
+Prefix the commit message with 'fix' following Conventional Commits
+
+## Evidence
+
+- Pattern in commits.prefixes: fix
+- Seen in commit: fix(daemon): support authenticated proxy browser routes
+
+---
+id: open-design-instinct-commit-format-conventional
+trigger: "When writing any commit message"
+confidence: 0.8
+domain: git
+source: repo-analysis
+source_repo: austinmao/open-design
+---
+
+# Open Design Instinct Commit Format Conventional
+
+## Action
+
+Follow the Conventional Commits format
+
+## Evidence
+
+- Pattern in commits.type: conventional
+
+---
+id: open-design-instinct-error-handling-try-catch
+trigger: "When handling errors in code"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: austinmao/open-design
+---
+
+# Open Design Instinct Error Handling Try Catch
+
+## Action
+
+Use try-catch blocks for error handling
+
+## Evidence
+
+- Pattern in errorHandling.style: try-catch
+
+---
+id: open-design-instinct-error-handling-global-handler
+trigger: "When handling uncaught errors"
+confidence: 0.7
+domain: code-style
+source: repo-analysis
+source_repo: austinmao/open-design
+---
+
+# Open Design Instinct Error Handling Global Handler
+
+## Action
+
+Use a global error handler
+
+## Evidence
+
+- Pattern in errorHandling.globalHandler: true
+
+---
+id: open-design-instinct-test-location-mixed
+trigger: "When adding new tests"
+confidence: 0.6
+domain: testing
+source: repo-analysis
+source_repo: austinmao/open-design
+---
+
+# Open Design Instinct Test Location Mixed
+
+## Action
+
+Place tests either alongside source files or in dedicated folders, as both are used
+
+## Evidence
+
+- Pattern in architecture.folderStructure.testLocation: mixed
+
