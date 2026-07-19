@@ -3405,34 +3405,56 @@ function localOriginFromHeader(value) {
   }
 }
 
+function trustedProxyOriginFromHeader(value) {
+  // This is a CORS/route-reachability decision, never authentication. A daemon
+  // bound off-loopback cannot start without OD_API_TOKEN, and the global /api
+  // bearer middleware above authenticates the edge before this route guard.
+  if (process.env.OD_TRUST_PROXY !== '1' || typeof value !== 'string') return null;
+  const trimmed = value.trim();
+  if (!trimmed || trimmed === 'null' || trimmed.includes(',')) return null;
+
+  try {
+    const parsed = new URL(trimmed);
+    if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return null;
+    if (parsed.pathname !== '/' || parsed.search || parsed.hash || parsed.username || parsed.password) return null;
+    return configuredAllowedOrigins().includes(parsed.origin) ? parsed.origin : null;
+  } catch {
+    return null;
+  }
+}
+
 function validateLocalDaemonRequest(req) {
-  if (!isLoopbackPeerAddress(req.socket?.remoteAddress)) {
-    return {
-      ok: false,
-      message: 'request peer must be a loopback address',
-      details: { peer: 'remoteAddress' },
-    };
-  }
-
-  const host = normalizeLocalAuthority(req.get('host'));
-  if (!host || !isLoopbackHostname(host.hostname)) {
-    return {
-      ok: false,
-      message: 'request host must be a loopback daemon address',
-      details: { header: 'host' },
-    };
-  }
-
   const originHeader = req.get('origin');
-  if (originHeader !== undefined && !localOriginFromHeader(originHeader)) {
+  const trustedProxyOrigin = trustedProxyOriginFromHeader(originHeader);
+  if (!trustedProxyOrigin) {
+    if (!isLoopbackPeerAddress(req.socket?.remoteAddress)) {
+      return {
+        ok: false,
+        message: 'request peer must be a loopback address',
+        details: { peer: 'remoteAddress' },
+      };
+    }
+
+    const host = normalizeLocalAuthority(req.get('host'));
+    if (!host || !isLoopbackHostname(host.hostname)) {
+      return {
+        ok: false,
+        message: 'request host must be a loopback daemon address',
+        details: { header: 'host' },
+      };
+    }
+  }
+
+  const requestOrigin = trustedProxyOrigin ?? localOriginFromHeader(originHeader);
+  if (originHeader !== undefined && !requestOrigin) {
     return {
       ok: false,
-      message: 'request origin must be a loopback daemon origin',
+      message: 'request origin must be a loopback or trusted proxy origin',
       details: { header: 'origin' },
     };
   }
 
-  return { ok: true, origin: localOriginFromHeader(originHeader) };
+  return { ok: true, origin: requestOrigin };
 }
 
 function requireLocalDaemonRequest(req, res, next) {
@@ -6641,7 +6663,17 @@ export async function startServer({
       });
       res.json(response);
     } catch (err) {
-      res.status(500).json({ error: err instanceof Error ? err.message : String(err) });
+      const message = err instanceof Error ? err.message : String(err);
+      if (/AMR vela binary could not be resolved|vela binary not found/i.test(message)) {
+        res.json({
+          source: 'preset',
+          models: [],
+          refreshing: false,
+          remoteError: message,
+        });
+        return;
+      }
+      res.status(500).json({ error: message });
     }
   });
 
