@@ -744,6 +744,42 @@ describe('POST /api/integrations/vela/analytics-entry', () => {
   });
 });
 
+describe('GET /api/amr/models', () => {
+  it('returns an unavailable preset catalog instead of 500 when the optional vela binary is missing', async () => {
+    const dataDir = process.env.OD_DATA_DIR as string;
+    const previous = await readAppConfig(dataDir);
+    await writeAppConfig(dataDir, {
+      ...previous,
+      agentCliEnv: {
+        ...(previous.agentCliEnv ?? {}),
+        amr: {
+          ...((previous.agentCliEnv?.amr as Record<string, string>) ?? {}),
+          VELA_BIN: path.join(tmpHome, 'missing-vela'),
+        },
+      },
+    });
+
+    try {
+      const response = await getJson<{
+        source?: string;
+        models?: Array<{ id: string }>;
+        refreshing?: boolean;
+        remoteError?: string;
+      }>(`${baseUrl}/api/amr/models`);
+
+      expect(response.status).toBe(200);
+      expect(response.body).toMatchObject({
+        source: 'preset',
+        models: [],
+        refreshing: false,
+        remoteError: 'AMR vela binary could not be resolved',
+      });
+    } finally {
+      await writeAppConfig(dataDir, previous as unknown as Record<string, unknown>);
+    }
+  });
+});
+
 describe('POST /api/integrations/vela/logout', () => {
   it('drops back to preset AMR models after file-backed logout invalidates the cached remote catalog', async () => {
     seedLogin('local');

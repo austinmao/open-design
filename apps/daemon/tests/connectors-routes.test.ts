@@ -223,7 +223,13 @@ async function jsonFetch<TBody = JsonObject>(url: string, init?: RequestInit): P
   return { status: response.status, body: await response.json() as TBody };
 }
 
-async function requestWithHostHeader(method: string, url: string, host: string, body?: JsonObject): Promise<HostHeaderResponse> {
+async function requestWithHostHeader(
+  method: string,
+  url: string,
+  host: string,
+  body?: JsonObject,
+  headers: Record<string, string> = {},
+): Promise<HostHeaderResponse> {
   const target = new URL(url);
   return await new Promise<HostHeaderResponse>((resolve, reject) => {
     const req = httpRequest(
@@ -235,6 +241,7 @@ async function requestWithHostHeader(method: string, url: string, host: string, 
         method,
         headers: {
           host,
+          ...headers,
           ...(body === undefined ? {} : { 'content-type': 'application/json' }),
         },
       },
@@ -258,8 +265,13 @@ async function postWithHostHeader(url: string, host: string): Promise<HostHeader
   return requestWithHostHeader('POST', url, host);
 }
 
-async function putWithHostHeader(url: string, host: string, body: JsonObject): Promise<HostHeaderResponse> {
-  return requestWithHostHeader('PUT', url, host, body);
+async function putWithHostHeader(
+  url: string,
+  host: string,
+  body: JsonObject,
+  headers: Record<string, string> = {},
+): Promise<HostHeaderResponse> {
+  return requestWithHostHeader('PUT', url, host, body, headers);
 }
 
 function mintConnectorToolToken(projectId = 'connector-route-project', runId = 'connector-route-run', overrides: Partial<Parameters<typeof toolTokenRegistry.mint>[0]> = {}): string {
@@ -475,6 +487,52 @@ describe('connector routes', () => {
     expect(response.status).toBe(403);
     expect(response.body).toContain('request host must be a loopback daemon address');
     expect(readComposioConfig().apiKey).toBe('cmp_test');
+  });
+
+  it('accepts Composio config updates from the configured browser origin behind a trusted proxy', async () => {
+    const previousAllowedOrigins = process.env.OD_ALLOWED_ORIGINS;
+    const previousTrustProxy = process.env.OD_TRUST_PROXY;
+    const browserOrigin = 'https://workspace.od.example.com';
+    await new Promise<void>((resolve, reject) => {
+      server!.close((error?: Error) => (error ? reject(error) : resolve()));
+    });
+    server = undefined;
+    process.env.OD_ALLOWED_ORIGINS = browserOrigin;
+    process.env.OD_TRUST_PROXY = '1';
+    try {
+      const started = (await startServer({
+        port: 0,
+        returnServer: true,
+      })) as StartedServer;
+      server = started.server;
+      baseUrl = started.url;
+      const response = await putWithHostHeader(
+        `${baseUrl}/api/connectors/composio/config`,
+        new URL(baseUrl).host,
+        { apiKey: 'cmp_proxy_allowed' },
+        { origin: browserOrigin },
+      );
+
+      expect(response.status, response.body).toBe(200);
+      expect(JSON.parse(response.body)).toMatchObject({
+        configured: true,
+      });
+      expect(readComposioConfig().apiKey).toBe('cmp_proxy_allowed');
+
+      const denied = await putWithHostHeader(
+        `${baseUrl}/api/connectors/composio/config`,
+        new URL(baseUrl).host,
+        { apiKey: 'cmp_attacker' },
+        { origin: 'https://attacker.example' },
+      );
+      expect(denied.status).toBe(403);
+      expect(readComposioConfig().apiKey).toBe('cmp_proxy_allowed');
+    } finally {
+      if (previousAllowedOrigins === undefined) delete process.env.OD_ALLOWED_ORIGINS;
+      else process.env.OD_ALLOWED_ORIGINS = previousAllowedOrigins;
+      if (previousTrustProxy === undefined) delete process.env.OD_TRUST_PROXY;
+      else process.env.OD_TRUST_PROXY = previousTrustProxy;
+    }
   });
 
   it('clears Composio connector credentials when rotating to a key with the same tail', async () => {
